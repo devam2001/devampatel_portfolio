@@ -95,20 +95,25 @@
     .drawer{
       position: fixed;
       inset: 0;
-      z-index: 60;
+      z-index: 999;
       pointer-events: none;  /* Add this */
       visibility: hidden;    /* Add this */
       background: rgba(15, 23, 42, 0.25);
       -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(100px);
+      backdrop-filter: blur(8px);
       opacity: 0;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .drawer-panel{
-        position: fixed;  /* Change from absolute to fixed */
+        position: fixed;  
         top: 0;
-        right: -100%;     /* Change from transform to right */
+        right: 0;
+        transform: translateX(100%);
+        will-change: transform;     
         height: 100%;
+        max-height: 100dvh;
+        overflow-y: auto;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
         width: min(92vw, 420px);
         background: rgba(255, 255, 255, 0.99);
         -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -117,9 +122,15 @@
         box-shadow: 
           -10px 0 30px rgba(0, 0, 0, 0.15),
           -2px 0 10px rgba(0, 0, 0, 0.1);
-        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);  /* Change transition property */
+        transition: transform .35s cubic-bezier(0.4, 0, 0.2, 1);
         padding-top: calc(var(--safe-top) + 8px);
     }
+
+    .drawer-panel .drawer-header {
+    flex-shrink: 0;  /* Prevent header from shrinking */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+   }
 
     /* Enhanced mobile menu items */
     .drawer nav a {
@@ -154,6 +165,16 @@
       width: 2rem;
     }
 
+    .drawer-panel nav {
+    flex: 1;
+    overflow-y: auto;  /* Enable scrolling for nav items */
+    padding: 0.5rem;
+    -webkit-overflow-scrolling: touch;  /* Smooth scrolling on iOS */
+  }
+  .drawer-panel nav {
+    padding-bottom: 2rem;
+}
+
     /* Smooth open/close animations */
     .drawer.-open {
         opacity: 1;
@@ -162,7 +183,8 @@
     }
 
     .drawer.-open .drawer-panel {
-        right: 0;  /* Change from transform to right:0 */
+        right: 0;
+        transform: translateX(0);
     }
     /* ---------- 3D / Tilt / Cards ---------- */
     .stack-3d{ perspective: 1200px; transform-style: preserve-3d; }
@@ -294,32 +316,35 @@
       </div>
 
       <!-- Mobile button -->
-      <button id="menuBtn" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-black/10" aria-label="Open menu">
+      <button id="menuBtn" aria-controls="mobileDrawer" aria-expanded="false" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-black/10" aria-label="Open menu">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
     </div>
 
-    <!-- Drawer -->
-    <div id="mobileDrawer" class="drawer" aria-hidden="true">
-      <div class="drawer-panel">
-        <div class="px-5 py-4 flex items-center justify-between border-b border-slate-200/50">
-          <div class="font-black text-lg tracking-tight">Menu</div>
-          <button id="menuClose" class="w-10 h-10 grid place-items-center rounded-full hover:bg-slate-100 transition-colors" aria-label="Close menu">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-        <nav class="mt-2 px-3 grid gap-1 text-lg font-bold">
-          <a href="#about" class="py-3 px-4">About</a>
-          <a href="#timeline" class="py-3 px-4">Career</a>
-          <a href="#skills" class="py-3 px-4">Skills</a>
-          <a href="#education" class="py-3 px-4">Education</a>
-          <a href="#projects" class="py-3 px-4">Projects</a>
-          <a href="#contact" class="py-3 px-4">Contact</a>
-        </nav>
-      </div>
+    </nav>
+
+<!-- Drawer (moved outside nav) -->
+<div id="mobileDrawer" class="drawer" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="drawer-panel">
+    <div class="drawer-header px-5 py-4 flex items-center justify-between">
+      <div class="font-black text-lg tracking-tight">Menu</div>
+      <button id="menuClose" class="w-10 h-10 grid place-items-center rounded-full hover:bg-slate-100 transition-colors" aria-label="Close menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
     </div>
+    <nav class="mt-2 px-3 grid gap-1 text-lg font-bold">
+      <a href="#about" class="py-3 px-4">About</a>
+      <a href="#timeline" class="py-3 px-4">Career</a>
+      <a href="#skills" class="py-3 px-4">Skills</a>
+      <a href="#education" class="py-3 px-4">Education</a>
+      <a href="#projects" class="py-3 px-4">Projects</a>
+      <a href="#contact" class="py-3 px-4">Contact</a>
+    </nav>
+  </div>
+</div>
+
+    </div>
+</div>
   </nav>
 
   <!-- Hero -->
@@ -1054,6 +1079,82 @@
 
     /* ---------- Misc ---------- */
     $('#year').textContent = new Date().getFullYear();
-  </script>
+  
+// === Mobile drawer: robust scroll lock + accessibility ===
+(function(){
+  const nav = document.querySelector('.nav-ios');
+  const mobileDrawer = document.getElementById('mobileDrawer');
+  if(!mobileDrawer) return;
+  const drawerPanel = mobileDrawer.querySelector('.drawer-panel');
+  const menuBtn = document.getElementById('menuBtn');
+  const menuClose = document.getElementById('menuClose');
+
+  let lastFocus = null;
+  let scrollY = 0;
+  const focusSel = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+
+  function lockScroll(){
+    scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  function unlockScroll(){
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollY || 0);
+  }
+
+  function openDrawer(){
+    lastFocus = document.activeElement;
+    mobileDrawer.classList.add('-open');
+    mobileDrawer.setAttribute('aria-hidden','false');
+    menuBtn?.setAttribute('aria-expanded','true');
+    lockScroll();
+    setTimeout(()=> drawerPanel.querySelector(focusSel)?.focus(), 50);
+  }
+  function closeDrawer(){
+    mobileDrawer.classList.remove('-open');
+    mobileDrawer.setAttribute('aria-hidden','true');
+    menuBtn?.setAttribute('aria-expanded','false');
+    unlockScroll();
+    setTimeout(()=> lastFocus?.focus(), 0);
+  }
+
+  menuBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); openDrawer(); });
+  menuClose?.addEventListener('click', (e)=>{ e.stopPropagation(); closeDrawer(); });
+
+  // click outside closes
+  mobileDrawer.addEventListener('pointerdown', (e)=>{
+    if(!drawerPanel.contains(e.target)) closeDrawer();
+  });
+
+  // trap focus within drawer
+  mobileDrawer.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){ e.preventDefault(); closeDrawer(); return; }
+    if(e.key !== 'Tab') return;
+    const nodes = Array.from(drawerPanel.querySelectorAll(focusSel)).filter(el=> el.offsetParent !== null);
+    if(!nodes.length) return;
+    const first = nodes[0], last = nodes[nodes.length-1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  });
+
+  // close when a link inside is clicked
+  drawerPanel.addEventListener('click', (e)=>{
+    const link = e.target.closest('a[href^="#"]');
+    if(link){ closeDrawer(); }
+  });
+
+  // Expose functions if existing listeners refer to them
+  window.__openMobileDrawer = openDrawer;
+  window.__closeMobileDrawer = closeDrawer;
+})();
+</script>
 </body>
 </html>
