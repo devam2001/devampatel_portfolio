@@ -8,7 +8,7 @@
   <!-- System font stack for robustness + Inter for branding -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="icon" type="image/png" href="https://drive.google.com/file/d/1OQqE9hmBKRJbDPw0STyXtxp1x-bl6UME/view?usp=drive_link">
+  <link rel="icon" type="image/png" href="DP.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 
   <!-- Tailwind (CDN) for resilient layout utilities -->
@@ -237,7 +237,7 @@
     <div class="relative">
       <!-- parallax visual -->
       <div class="parallax" aria-hidden="true">
-        <svg class="layer blob" data-depth="0.02" width="480" height="480" style="left:-96px; top:96px" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <svg class="layer blob" data-depth="0.02" width="480" height="400" style="left:-96px; top:96px" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <path fill="#a5b4fc" d="M49.6,-63.2C62.7,-55.9,69.7,-39,71.1,-23.1C72.6,-7.1,68.6,7.9,62,20.3C55.5,32.6,46.4,42.4,35.2,50.6C23.9,58.7,11.9,65.1,-1,66.6C-13.9,68.1,-27.8,64.7,-38.4,56.9C-49,49,-56.3,36.6,-61.2,23.1C-66.1,9.6,-68.6,-5,-63.8,-16.6C-59.1,-28.2,-47.1,-36.8,-35.1,-44.4C-23.1,-52,-11.6,-58.6,3.6,-63C18.8,-67.4,37.5,-69.5,49.6,-63.2Z" transform="translate(100 100)" />
         </svg>
         <svg class="layer" data-depth="0.06" width="160" height="160" style="left:72%; top:10%" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9">
@@ -840,7 +840,6 @@
       const url = "https://drive.google.com/uc?export=download&id=" + ID;
       const a = document.createElement("a");
       a.href = url;
-      a.download = "Devam_Resume.pdf"; // <-- custom filename
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
