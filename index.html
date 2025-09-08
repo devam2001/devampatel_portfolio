@@ -590,7 +590,7 @@
         </span>
         <span class="magnet">
           <span class="magnet-bg"></span>
-          <a href="https://linkedin.com/in/devampatel2501" target="_blank" rel="noopener" class="btn btn-ghost w-full justify-center">LinkedIn
+          <a href="https://www.linkedin.com/in/devampatel2501" target="_blank" rel="noopener" class="btn btn-ghost w-full justify-center">LinkedIn
             <span class="arrow" aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M5 12h14M13 5l7 7-7 7"/></svg>
             </span>
@@ -835,28 +835,14 @@
 
     /* ---------- Resume download ---------- */
     function downloadResume(){
-      const content = `DEVAMKUMAR PATEL
-QA Engineer (Automation + Manual)
-Email: devam2001patel@gmail.com
-LinkedIn: linkedin.com/in/devampatel2501
-
-SUMMARY
-QA Engineer delivering high-quality software via automation + manual strategy.
-
-SKILLS
-• Selenium WebDriver • Core Java • API Testing • TestNG • Manual Testing • SQL
-
-EXPERIENCE
-• QA Engineer — Ontic (2025–Present)
-• Associate QA Engineer — Antino (2023–Present)
-• QA Intern — Antino (2023)
-
-EDUCATION
-B.E. CSE — Gujarat Technological University (2020–2024), CGPA 8.5/10`;
-      const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'Devamkumar_Patel_Resume.txt'; a.click();
-      URL.revokeObjectURL(url);
+      const ID = "1Aml3ASuLJz9I979sLEAKHSkWPr9Iz7yH";
+      const url = "https://drive.google.com/uc?export=download&id=" + ID;
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Devam_Resume.pdf"; // <-- custom filename
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
     $('#resumeBtn')?.addEventListener('click', downloadResume);
     $('#resumeBtn2')?.addEventListener('click', downloadResume);
