@@ -38,45 +38,132 @@
 
     /* ---------- iOS glass navbar (mobile‑first) ---------- */
     .nav-ios{
-      position:fixed; inset:0 0 auto 0; z-index:50;
-      height: calc(var(--nav-h) + var(--safe-top));
-      padding-top: var(--safe-top);
-      background: rgba(255,255,255,.58);
-      -webkit-backdrop-filter: saturate(180%) blur(18px);
-      backdrop-filter: saturate(180%) blur(18px);
-      border-bottom: 1px solid rgba(60,60,67,.18);
-      box-shadow: 0 10px 24px rgba(2,6,23,.08);
-      transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+        position: fixed;
+        inset: 0 0 auto 0;
+        z-index: 50;
+        height: calc(var(--nav-h) + var(--safe-top));
+        padding-top: var(--safe-top);
+        background: rgba(255, 255, 255, 0.65);  /* Increased transparency */
+        -webkit-backdrop-filter: saturate(180%) blur(20px);  /* Enhanced blur */
+        backdrop-filter: saturate(180%) blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);  /* Lighter border */
+        box-shadow: 
+          0 10px 30px rgba(0, 0, 0, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.6);  /* Inner highlight */
     }
     .nav-ios.-scrolled{
-      background: rgba(255,255,255,.84);
-      border-bottom-color: rgba(60,60,67,.28);
-      box-shadow: 0 14px 30px rgba(2,6,23,.12);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
     }
+
+    /* Add this new style for nav links to enhance readability */
+    .nav-ios a {
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .nav-ios a:hover {
+  color: var(--brand1);
+}
+
+    /* Optional: Add subtle hover effect for nav items */
+    .nav-ios a::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      opacity: 0;
+      transform: scaleX(0.8);
+      transition: all 0.2s ease;
+    }
+
+    .nav-ios a:hover::after {
+      opacity: 1;
+      transform: scaleX(1);
+}
 
     /* Nav container aligns content vertically */
     .nav-inner{ height: var(--nav-h); display:flex; align-items:center; justify-content:space-between; gap:12px; }
 
     /* Mobile drawer (slide in) */
     .drawer{
-      position:fixed; inset:0; z-index:60;
-      background: rgba(15,23,42,.65);
-      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-      opacity:0; visibility:hidden; transition: opacity .22s ease, visibility .22s ease;
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;  /* Add this */
+      visibility: hidden;    /* Add this */
+      background: rgba(15, 23, 42, 0.25);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .drawer.-open{ opacity:1; visibility:visible; }
     .drawer-panel{
-      position:absolute; top:0; right:0; height:100%; width:min(92vw, 420px);
-      background: rgba(255,255,255,.92);
-      -webkit-backdrop-filter: saturate(160%) blur(18px);
-      backdrop-filter: saturate(160%) blur(18px);
-      border-left: 1px solid rgba(60,60,67,.18);
-      box-shadow: -16px 0 40px rgba(2,6,23,.24);
-      transform: translateX(100%); transition: transform .28s ease;
-      padding-top: calc(var(--safe-top) + 8px);
+        position: fixed;  /* Change from absolute to fixed */
+        top: 0;
+        right: -100%;     /* Change from transform to right */
+        height: 100%;
+        width: min(92vw, 420px);
+        background: rgba(255, 255, 255, 0.99);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        backdrop-filter: saturate(180%) blur(20px);
+        border-left: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 
+          -10px 0 30px rgba(0, 0, 0, 0.15),
+          -2px 0 10px rgba(0, 0, 0, 0.1);
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);  /* Change transition property */
+        padding-top: calc(var(--safe-top) + 8px);
     }
-    .drawer.-open .drawer-panel{ transform: translateX(0); }
 
+    /* Enhanced mobile menu items */
+    .drawer nav a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+      margin: 0.25rem 0;
+      border-radius: 0.5rem;
+      transition: all 0.2s ease;
+      background: transparent;  /* Light background for links */
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .drawer nav a:hover {
+      background: rgba(99, 102, 241, 0.08);
+      color: var(--brand1);
+    }
+    .drawer nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 0;
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      transition: width 0.2s ease;
+    }
+
+    .drawer nav a:hover::after {
+      width: 2rem;
+    }
+
+    /* Smooth open/close animations */
+    .drawer.-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;  /* Add this */
+    }
+
+    .drawer.-open .drawer-panel {
+        right: 0;  /* Change from transform to right:0 */
+    }
     /* ---------- 3D / Tilt / Cards ---------- */
     .stack-3d{ perspective: 1200px; transform-style: preserve-3d; }
     .tilt{ transform-style: preserve-3d; transition: transform .16s ease; }
@@ -120,10 +207,11 @@
     .magnet > *{ position:relative; z-index:1; }
 
     /* ---------- Hero & Parallax ---------- */
-    .hero-title{ font-weight:900; letter-spacing:.01em; line-height:.95;
+    .hero-title{ 
+      font-weight:900; letter-spacing:.01em; line-height:.95;
       font-size: clamp(40px, 8vw, 88px);
       background: linear-gradient(135deg, #020617, #334155 30%, #0ea5e9 70%, #6366f1);
-      -webkit-background-clip: text; background-clip: text; color: transparent; }
+      -webkit-background-clip: text; background-clip: text; color: transparent;margin-top: 1rem; }
     .hero-sub{ color:var(--muted); font-size: clamp(16px, 2.7vw, 18px); }
     .parallax{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
     .layer{ position:absolute; will-change: transform; filter: drop-shadow(0 6px 24px rgba(2,6,23,.12)); opacity:.9; }
@@ -214,26 +302,28 @@
     <!-- Drawer -->
     <div id="mobileDrawer" class="drawer" aria-hidden="true">
       <div class="drawer-panel">
-        <div class="px-5 py-4 flex items-center justify-between">
-          <div class="font-black text-lg">Menu</div>
-          <button id="menuClose" class="w-10 h-10 grid place-items-center rounded-full border border-black/10" aria-label="Close menu">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <div class="px-5 py-4 flex items-center justify-between border-b border-slate-200/50">
+          <div class="font-black text-lg tracking-tight">Menu</div>
+          <button id="menuClose" class="w-10 h-10 grid place-items-center rounded-full hover:bg-slate-100 transition-colors" aria-label="Close menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
           </button>
         </div>
-        <nav class="mt-2 px-5 grid gap-2 text-lg font-bold">
-          <a href="#about" class="py-3">About</a>
-          <a href="#timeline" class="py-3">Career</a>
-          <a href="#education" class="py-3">Education</a>
-          <a href="#projects" class="py-3">Projects</a>
-          <a href="#skills" class="py-3">Skills</a>
-          <a href="#contact" class="py-3">Contact</a>
+        <nav class="mt-2 px-3 grid gap-1 text-lg font-bold">
+          <a href="#about" class="py-3 px-4">About</a>
+          <a href="#timeline" class="py-3 px-4">Career</a>
+          <a href="#skills" class="py-3 px-4">Skills</a>
+          <a href="#education" class="py-3 px-4">Education</a>
+          <a href="#projects" class="py-3 px-4">Projects</a>
+          <a href="#contact" class="py-3 px-4">Contact</a>
         </nav>
       </div>
     </div>
   </nav>
 
   <!-- Hero -->
-  <main id="home" class="min-h-screen-dvh grid items-center">
+  <main id="home" class="min-h-screen-dvh grid items-center pt-[calc(var(--nav-h)+2rem)] md:pt-0">
     <div class="relative">
       <!-- parallax visual -->
       <div class="parallax" aria-hidden="true">
@@ -299,13 +389,13 @@
             </div>
             <div class="mt-6 grid grid-cols-3 gap-3">
               <div class="rounded-xl bg-white p-4 shadow-sm tilt-layer" style="--z:30px">
-                <div class="text-2xl font-extrabold text-indigo-600">50+</div><div class="text-xs text-slate-500">Projects</div>
+                <div class="text-2xl font-extrabold text-indigo-600">15+</div><div class="text-xs text-slate-500">Projects</div>
               </div>
               <div class="rounded-xl bg-white p-4 shadow-sm tilt-layer" style="--z:20px">
-                <div class="text-2xl font-extrabold text-indigo-600">2</div><div class="text-xs text-slate-500">Years</div>
+                <div class="text-2xl font-extrabold text-indigo-600">2+</div><div class="text-xs text-slate-500">Years</div>
               </div>
               <div class="rounded-xl bg-white p-4 shadow-sm tilt-layer" style="--z:10px">
-                <div class="text-2xl font-extrabold text-indigo-600">95%</div><div class="text-xs text-slate-500">Bug rate</div>
+                <div class="text-2xl font-extrabold text-indigo-600">96%</div><div class="text-xs text-slate-500">Bug rate</div>
               </div>
             </div>
             <span class="glare"></span>
@@ -366,6 +456,43 @@
     </div>
   </section>
 
+  <!-- Skills -->
+  <section id="skills" class="py-20 bg-gradient-to-b from-slate-50 to-white">
+    <div class="container-lg">
+      <div class="reveal">
+        <h2 class="text-[clamp(26px,4.2vw,40px)] font-black">Skills & Technologies</h2>
+        <p class="text-slate-600 mt-2">Strength in reliable automation and thoughtful test design.</p>
+      </div>
+
+      <div class="mt-10 grid md:grid-cols-2 gap-8">
+        <div class="reveal tilt card p-7">
+          <h3 class="font-bold text-lg">Technical Skills</h3>
+          <div class="mt-5 space-y-5">
+            <div class="flex items-center justify-between text-sm font-semibold"><span>Selenium WebDriver</span><span>90%</span></div>
+            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:95%"></div></div>
+            <div class="mt-5 flex items-center justify-between text-sm font-semibold"><span>Core Java</span><span>85%</span></div>
+            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:90%"></div></div>
+            <div class="mt-5 flex items-center justify-between text-sm font-semibold"><span>API Testing</span><span>80%</span></div>
+            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:92%"></div></div>
+          </div>
+          <span class="glare"></span>
+        </div>
+        <div class="reveal tilt card p-7">
+          <h3 class="font-bold text-lg">Testing Expertise</h3>
+          <div class="mt-5 space-y-5">
+            <div class="flex items-center justify-between text-sm font-semibold"><span>Manual Testing</span><span>95%</span></div>
+            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:95%"></div></div>
+            <div class="mt-5 flex items-center justify-between text-sm font-semibold"><span>Test Design</span><span>90%</span></div>
+            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:90%"></div></div>
+            <div class="mt-5 flex items-center justify-between text-sm font-semibold"><span>Regression</span><span>92%</span></div>
+            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:92%"></div></div>
+          </div>
+          <span class="glare"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Career -->
   <section id="timeline" class="py-20 bg-gradient-to-b from-white to-slate-50">
     <div class="container-lg">
@@ -377,12 +504,18 @@
       <div class="mt-10 grid md:grid-cols-2 gap-8">
         <div class="reveal tilt card p-6">
           <div class="text-sm font-semibold text-sky-600">July 2025 — Present</div>
-          <h3 class="mt-1 text-xl font-bold">QA Engineer · Ontic</h3>
+          <a href="https://ontic.co" target="_blank" rel="noopener">
+            <img src="ontic_technologies_logo.jpeg" alt="Ontic Logo" class="h-6 w-auto my-2" />
+          </a>
+          <h3 class="mt-1 text-xl font-bold">QA Engineer – Automation & Manual · Ontic (Client)</h3>
           <p class="text-slate-600 mt-3">Led automation coverage for enterprise workflows; stabilized flaky suites and accelerated release confidence.</p>
           <span class="glare"></span>
         </div>
         <div class="reveal tilt card p-6">
           <div class="text-sm font-semibold text-indigo-600">Sep 2023 — Present</div>
+          <a href="https://antino.com" target="_blank" rel="noopener">
+            <img src="antino_labs_logo.png" alt="Antino Logo" class="h-8 w-auto my-2" />
+          </a>
           <h3 class="mt-1 text-xl font-bold">Associate QA Engineer · Antino</h3>
           <p class="text-slate-600 mt-3">Built regression packs, API verification, and CI integrations; mentored interns on test design.</p>
           <span class="glare"></span>
@@ -529,52 +662,8 @@
     </div>
   </section>
 
-  <!-- Skills -->
-  <section id="skills" class="py-20 bg-gradient-to-b from-slate-50 to-white">
-    <div class="container-lg">
-      <div class="reveal">
-        <h2 class="text-[clamp(26px,4.2vw,40px)] font-black">Skills & Technologies</h2>
-        <p class="text-slate-600 mt-2">Strength in reliable automation and thoughtful test design.</p>
-      </div>
-
-      <div class="mt-10 grid md:grid-cols-2 gap-8">
-        <div class="reveal tilt card p-7">
-          <h3 class="font-bold text-lg">Technical Skills</h3>
-          <div class="mt-5 space-y-5">
-            <div>
-              <div class="flex items-center justify-between text-sm font-semibold"><span>Selenium WebDriver</span><span>90%</span></div>
-              <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:90%"></div></div>
-            </div>
-            <div>
-              <div class="flex items-center justify-between text-sm font-semibold"><span>Core Java</span><span>85%</span></div>
-              <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:85%"></div></div>
-            </div>
-            <div>
-              <div class="flex items-center justify-between text-sm font-semibold"><span>API Testing</span><span>80%</span></div>
-              <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:80%"></div></div>
-            </div>
-          </div>
-          <span class="glare"></span>
-        </div>
-
-        <div class="reveal tilt card p-7">
-          <h3 class="font-bold text-lg">Testing Expertise</h3>
-          <div class="mt-5 space-y-5">
-            <div class="flex items-center justify-between text-sm font-semibold"><span>Manual Testing</span><span>95%</span></div>
-            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:95%"></div></div>
-            <div class="mt-5 flex items-center justify-between text-sm font-semibold"><span>Test Design</span><span>90%</span></div>
-            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:90%"></div></div>
-            <div class="mt-5 flex items-center justify-between text-sm font-semibold"><span>Regression</span><span>92%</span></div>
-            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full" style="width:92%"></div></div>
-          </div>
-          <span class="glare"></span>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Contact -->
-  <section id="contact" class="py-20">
+  <section id="contact" class="py-20 bg-gradient-to-b from-white to-slate-50">
     <div class="container-lg text-center">
       <div class="reveal">
         <h2 class="text-[clamp(26px,4.2vw,40px)] font-black">Let’s Connect</h2>
