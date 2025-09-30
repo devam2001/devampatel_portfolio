@@ -3,7 +3,7 @@ import { $ } from './utils.js';
 export function initResume(){
   function downloadResume(){
     const ID = "1Aml3ASuLJz9I979sLEAKHSkWPr9Iz7yH";
-    const url = "https://drive.google.com/uc?export=download&id=" + ID;
+    const url = "https://drive.google.com/file/d/" + ID;
     const a = document.createElement("a");
     a.href = url;
     document.body.appendChild(a);
