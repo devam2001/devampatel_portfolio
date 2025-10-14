@@ -2,7 +2,7 @@ import { $ } from './utils.js';
 
 export function initResume(){
 
-    const DEFAULT_ID = "1Aml3ASuLJz9I979sLEAKHSkWPr9Iz7yH";
+    const DEFAULT_ID = "1OMWokbw7JukOXdI5YUHhRtMkF5YfeZWG";
   
     function extractDriveId(linkOrId) {
       if (!linkOrId) return null;
